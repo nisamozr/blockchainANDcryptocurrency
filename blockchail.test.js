@@ -3,7 +3,7 @@ const Blockchain = require("./blockchain")
 
 
 describe('Blockchain()', () => {
-    let blockchain , newChain;
+    let blockchain , newChain, orginalChain;
     beforeEach(() => {
         blockchain = new Blockchain();
         newChain = new Blockchain();
@@ -28,7 +28,7 @@ describe('Blockchain()', () => {
         describe('when the chain does not start with the genesis block', () => {
             it('return false', () => {
                 blockchain.chain[0] = { data: 'fake-geniseis' }
-                expect(Blockchain.isValideChain(blockchain.chain)).toBe(false)
+                expect(Blockchain.isValidChain(blockchain.chain)).toBe(false)
 
             })
 
@@ -44,23 +44,23 @@ describe('Blockchain()', () => {
 
                     blockchain.chain[2].lastHash = 'brokrn-lastHase';
 
-                    expect(Blockchain.isValideChain(blockchain.chain)).toBe(false)
+                    expect(Blockchain.isValidChain(blockchain.chain)).toBe(false)
 
                 })
             })
             describe('chain contain a invalid field', () => {
                 it('returns false', () => {
 
-                    blockchain.chain[2].data = 'someting ';
+                    blockchain.chain[2].data = 'some-bad-and-evil-data' ;
 
-                    expect(Blockchain.isValideChain(blockchain.chain)).toBe(false)
+                    expect(Blockchain.isValidChain(blockchain.chain)).toBe(false)
 
                 })
             })
-            describe('chan cointain any invalid fiels', () => {
+            describe('chain cointain any invalid fiels', () => {
                 it('return true', () => {
 
-                    expect(Blockchain.isValideChain(blockchain.chain)).not.toBe(true);
+                    expect(Blockchain.isValidChain(blockchain.chain)).toBe(true);
 
                 })
             })
@@ -83,14 +83,14 @@ describe('Blockchain()', () => {
 
     describe('when the new chain is longer', ()=>{
         beforeEach(()=>{
-            blockchain.addBlock({ data: 'bears' });
-            blockchain.addBlock({ data: 'beets' });
-            blockchain.addBlock({ data: 'baaaaaaaas' });
+            newChain.addBlock({ data: 'bears' });
+            newChain.addBlock({ data: 'beets' });
+            newChain.addBlock({ data: 'baaaaaaaas' });
         })
         describe('the chain is invalid',()=>{
 
             it('does not replace the chain', ()=>{
-                newChain.chain[2] = 'some- fake - hash';
+                newChain.chain[2] = 'some-fake-hash';
                 blockchain.replaceChain(newChain.chain);
 
                 expect(blockchain.chain).toEqual(orginalChain);
@@ -101,6 +101,10 @@ describe('Blockchain()', () => {
         })
         describe('the chain is valid', ()=>{
             it('replace the chain', ()=>{
+                blockchain.replaceChain(newChain.chain);
+              
+
+                expect(blockchain.chain).toEqual(newChain.chain);
 
             })
 
