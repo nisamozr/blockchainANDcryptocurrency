@@ -8,4 +8,4 @@ const GenesisData = {
     nonce: 0,
     data:[]
 };
-module.exports = {GenesisData};
+module.exports = {GenesisData, minerRate, initialDifficulty};

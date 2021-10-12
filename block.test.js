@@ -1,5 +1,6 @@
+const hexToBinary = require('hex-to-binary')
 const Block = require("./block");
-const { GenesisData } = require("./config");
+const { GenesisData, minerRate } = require("./config");
 const cryptoHash = require("./cryptoHash");
 describe('Block',()=>{
     const timestamp = 2000;
@@ -15,8 +16,9 @@ describe('Block',()=>{
         expect(block.lastHash).toEqual(lastHash)
         expect(block.hash).toEqual(hash)
         expect(block.data).toEqual(data)
-        expect(block.nonce).toEqual(nonce)
         expect(block.difficulty).toEqual(difficulty)
+        expect(block.nonce).toEqual(nonce)
+       
         
     });
 
@@ -51,7 +53,7 @@ describe('Block',()=>{
             expect(mineBlock.hash).toEqual(cryptoHash(mineBlock.timestamp, mineBlock.nonce, mineBlock.difficulty, lastBlock.hash, data))
         })
         it('set a hash that maches the difficulty criteria',()=>{
-            expect(mineBlock.hash.substring(0, mineBlock.difficulty)).toEqual('0'.repeat(mineBlock.difficulty))
+            expect(hexToBinary(mineBlock.hash).substring(0, mineBlock.difficulty)).toEqual('0'.repeat(mineBlock.difficulty))
         })
         it('adjusts the difficulty', ()=>{
             const possibleResult = [lastBlock.difficulty+1, lastBlock.difficulty-1]
@@ -62,17 +64,17 @@ describe('Block',()=>{
 
     describe('adjustDifficuty()', ()=>{
         it('raise the difficulty for a quickly mined block', ()=>{
-            expect(Block.adjustDfficalty({originalBlock : block.timestamp + minerRate - 100})).toEqual(block.difficulty + 1)
+            expect(Block.adjustDfficalty({originalBlock : block, timestamp : block.timestamp  + minerRate - 100})).toEqual(block.difficulty + 1)
 
         })
         it('lower the difficulty for a slowly mined block', ()=>{
-            expect(Block.adjustDfficalty({originalBlock : block.timestamp + minerRate + 100})).toEqual(block.difficulty-1)
+            expect(Block.adjustDfficalty({originalBlock : block, timestamp: block.timestamp + minerRate + 100})).toEqual(block.difficulty - 1)
 
         })
         it('has a lower limit of 1', ()=>{
             block.difficulty = -1;
 
-            expect(Block.adjustDfficalty({originalBlock: Block})).toEqual(1);
+            expect(Block.adjustDfficalty({originalBlock : block })).toEqual(1);
         })
     })
 

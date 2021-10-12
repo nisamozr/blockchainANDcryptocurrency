@@ -1,14 +1,16 @@
+const hexToBinary = require('hex-to-binary')
 const { GenesisData, minerRate } = require("./config");
 const cryptoHash = require("./cryptoHash");
 
+
 class Block{
-    constructor({timestamp, lastHash, hash, data, nonce , difficulty}){
+    constructor({timestamp, lastHash, hash, data, nonce , difficulty }){
         this.timestamp = timestamp;
         this.lastHash = lastHash;
         this.hash = hash;
         this.data = data;
         this.nonce = nonce;
-        this.difficulty;
+        this.difficulty = difficulty;
     }
     static genesis(){
         return new this(GenesisData);
@@ -25,7 +27,7 @@ class Block{
             timestamp = Date.now();
             difficulty = Block.adjustDfficalty({originalBlock: lastBlock, timestamp})
             hash = cryptoHash(timestamp, lastHash, data, nonce, difficulty)
-        }while(hash.substring(0, difficulty) !== '0'.repeat(difficulty))
+        }while(hexToBinary(hash).substring(0, difficulty) !== '0'.repeat(difficulty))
         return new this({
             timestamp,
             lastHash,
@@ -45,7 +47,8 @@ class Block{
 
         if(difference > minerRate) return difficulty - 1;
 
-        return difficulty +1 ;
+        return difficulty + 1 ;
+        
             
     }
 }
