@@ -8,4 +8,5 @@ const GenesisData = {
     nonce: 0,
     data:[]
 };
-module.exports = {GenesisData, minerRate, initialDifficulty};
+const startingBalance = 1000;
+module.exports = {GenesisData, minerRate, initialDifficulty,startingBalance};
