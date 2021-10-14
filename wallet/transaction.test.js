@@ -1,6 +1,7 @@
+const Transaction = require('./transaction')
 const Wallet = require('./index');
 const { verifySignature } = require('../util');
-const Transaction = require('./transaction')
+
 
 describe('Transaction ', () => {
     let transaction, senderWallet, recipent, amount;
@@ -55,10 +56,9 @@ describe('Transaction ', () => {
 
         })
         describe('when the transaction is valid', () => {
-            it('return true', () => {
+            it('returns true', ()=> {
                 expect(Transaction.validTransation(transaction)).toBe(true)
             })
-
         })
         describe('when the transaction is invalid ', () => {
             describe('when transaction outputmap ', () => {
