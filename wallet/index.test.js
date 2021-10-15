@@ -40,7 +40,7 @@ describe('wallet', ()=>{
     describe('creatTransaction()', ()=>{
         describe('and the amount exceed the balance', ()=>{
             it('throws an error', ()=>{
-                expect(()=> wallet.createTransaction({amount:999999, recipient: 'foo-recipient'})).toThrow('Amount exceeds balance');
+                expect(()=> wallet.createTransaction({amount:999999, recipent: 'foo-recipient'})).toThrow('Amount exceeds balance');
             })
            
         })
@@ -50,7 +50,7 @@ describe('wallet', ()=>{
 
             beforeEach(()=>{
                     amount = 50; 
-                    recipent = 'foo-recipipient';
+                    recipent = "foo-recipient"
                     transaction = wallet.createTransaction({amount, recipent})
             })
 
@@ -62,7 +62,7 @@ describe('wallet', ()=>{
                 expect(transaction.input.address).toEqual(wallet.publicKey)
 
             })
-            it('outupt the amount the recipient', ()=>{
+            it('outupt the amount the recipient', ()=>{ 
                 expect(transaction.outputMap[recipent]).toEqual(amount)
 
             })

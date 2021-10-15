@@ -63,7 +63,7 @@ describe('Transaction ', () => {
         describe('when the transaction is invalid ', () => {
             describe('when transaction outputmap ', () => {
                 it('returns flase', () => {
-                    transaction.outputMap[senderWallet.publicKey] = 99999;
+                    transaction.outputMap[senderWallet.publicKey] = 999999;
                     expect(Transaction.validTransation(transaction)).toBe(false)
                     expect(errorMck).toHaveBeenCalled()
                 })
@@ -75,6 +75,34 @@ describe('Transaction ', () => {
                     expect(errorMck).toHaveBeenCalled()
                 })
             })
+        })
+    })
+    describe('update', ()=>{
+        let originalSingnature, orginalSenderOutput, nextRecipient, nextAmount;
+
+        beforeEach(()=>{
+            originalSingnature = transaction.input.signature;
+            orginalSenderOutput = transaction.outputMap[senderWallet.publicKey]
+            nextRecipient = 'netx-resipent'
+            nextAmount = 50
+
+            transaction.update({senderWallet, recipent:nextRecipient, amount:nextAmount})
+        })
+        it('outpus the amount to the next resipient', ()=>{
+            expect(transaction.outputMap[nextRecipient]).toEqual(nextAmount)
+
+        })
+        it('substracts the amound from the original sender output amount', ()=>{
+            expect(transaction.outputMap[senderWallet.publicKey]).toEqual(orginalSenderOutput-nextAmount)
+            
+        })
+        it('maintains a total output that matches the input amount', ()=>{
+            expect(Object.values(transaction.outputMap).reduce((total, outputAmount) => total+ outputAmount)).toEqual(transaction.input.amount)
+            
+        })
+        it('re-signs the transaction', ()=>{
+            expect(transaction.input.signature).not.toEqual(originalSingnature)
+            
         })
     })
 
