@@ -1,5 +1,5 @@
 const radis = require('redis');
-const blockchain = require('./blockchain')
+const blockchain = require('../blockchain/blockchain')
 
 const channels = {
     test: 'test',
