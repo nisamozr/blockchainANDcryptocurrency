@@ -3,12 +3,14 @@ const blockchain = require('../blockchain/blockchain')
 
 const channels = {
     test: 'test',
-    Blockchain: 'blockchain'
+    Blockchain: 'blockchain',
+    Transaction: 'Transaction'
 }
 
 class Pubsub{
-    constructor({blockchain}){
+    constructor({blockchain, transactionPool}){
         this.blockchain = blockchain
+        this.transactionPool = transactionPool
         
         this.publisher = radis.createClient();
         this.subscribler = radis.createClient();
@@ -28,9 +30,15 @@ class Pubsub{
         console.log(`massage racived chanall ${channel} massage ${message}`)
         const parsedMessage = JSON.parse(message)
 
-        if(channel == channels.Blockchain){
-            this.blockchain.replaceChain(parsedMessage)
+        switch(channel){
+            case channels.Blockchain : this.blockchain.replaceChain(parsedMessage)
+            break;
+            case channel.Transaction : this.transactionPool.setTransaction(parsedMessage)
+            break;
+            default: return;
         }
+
+       
     }
     subscribeToChannel(){
         Object.values(channels).forEach(channel =>{
@@ -47,6 +55,12 @@ class Pubsub{
     }
     broadcastChain(){
         this.publish({channel: channels.Blockchain, message: JSON.stringify(this.blockchain.chain)})
+    }
+    broadcastTransaction(transaction){
+        this.publish({
+            channel: channels.Transaction,
+            message: JSON.stringify(transaction)
+        })
     }
 }
 

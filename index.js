@@ -9,8 +9,8 @@ const Wallet = require('./wallet/index')
 
 const app = express();
 const blockchain = new Blockchain();
-const pubsub = new PubSub({blockchain})
 const transactionPool = new TransactionPool()
+const pubsub = new PubSub({blockchain, transactionPool})
 const wallet = new Wallet()
 
 const Defalt_Port = 3000;
@@ -31,12 +31,29 @@ app.post('/api/mine', (req, res)=>{
 })
 app.post('/api/transact', (req, res)=>{
     const {amount , recipent} = req.body
+    let transaction = transactionPool.existingTransaction({inputAddress: wallet.publicKey})
+    try{
+        if(transaction){
+            transaction.update({senderWallet: wallet, recipent, amount})
+        }else{
+            transaction = wallet.createTransaction({recipent, amount});
+        }
+       
 
-    const transaction = wallet.createTransaction({recipent, amount});
+    }catch(error){
+        return res.status(400).json({type: 'error', message: error.message})
+
+    }
+
+ 
     transactionPool.setTransaction(transaction)
-    console.log('transactionPool', transactionPool)
+    pubsub.broadcastTransaction(transaction)
+    // console.log('transactionPool', transactionPool)
 
-    res.json({transaction})
+    res.json({type:"success", transaction})
+})
+app.get('/api/transaction-pool-map', (req, res)=> {
+    res.json(transactionPool.transactionMap)
 })
 
 const syncChains = ()=>{
