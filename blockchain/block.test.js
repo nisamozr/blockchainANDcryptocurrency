@@ -17,9 +17,7 @@ describe('Block',()=>{
         expect(block.hash).toEqual(hash)
         expect(block.data).toEqual(data)
         expect(block.difficulty).toEqual(difficulty)
-        expect(block.nonce).toEqual(nonce)
-       
-        
+        expect(block.nonce).toEqual(nonce)   
     });
 
     describe('Genesis()',()=>{
