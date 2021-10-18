@@ -56,7 +56,7 @@ app.get('/api/transaction-pool-map', (req, res)=> {
     res.json(transactionPool.transactionMap)
 })
 
-const syncChains = ()=>{
+const syncWithRootStat = ()=>{
     request({url: `${rootNodeAddress}/api/blocks`},(error, res, body)=>{
         if(!error && res.statusCode === 200){
             const rootChain = JSON.parse(body)
@@ -67,6 +67,15 @@ const syncChains = ()=>{
         
 
         }
+    })
+    request({url: `${rootNodeAddress}/api/transaction-pool-map`}, (error, res, body)=>{
+        if(!error && res.statusCode === 200){
+            const rootTransactionPoolMap = JSON.parse(body)
+
+            console.log('replace transaction pool map on a sync with', rootTransactionPoolMap)
+            transactionPool.setMap(rootTransactionPoolMap)
+        }
+
     })
 }
 
@@ -79,7 +88,7 @@ const PORT = peerPort || Defalt_Port;
 app.listen(PORT, ()=>{
     console.log(`listing at localhost:${PORT}`)
     if(PORT !== Defalt_Port){
-        syncChains();
+        syncWithRootStat();
     }
 
 })
