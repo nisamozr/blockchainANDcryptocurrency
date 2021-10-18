@@ -14,5 +14,12 @@ describe('Transaction Pool', ()=>{
 
     })
 
-    
+    describe('setTransaction()', ()=>{
+        it('add a transaction', () =>{
+            transactioPool.setTransaction(transaction)
+            expect(transactioPool.transactionMap[transaction.id]).toBe(transaction);
+        })
+    })
+
+
 })

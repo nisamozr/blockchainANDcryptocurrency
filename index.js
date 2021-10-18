@@ -4,10 +4,15 @@ const request = require('request')
 
 const Blockchain = require('./blockchain/blockchain');
 const PubSub = require('./app/pubsub')
+const TransactionPool = require('./wallet/transactioinPoot')
+const Wallet = require('./wallet/index')
 
 const app = express();
 const blockchain = new Blockchain();
 const pubsub = new PubSub({blockchain})
+const transactionPool = new TransactionPool()
+const wallet = new Wallet()
+
 const Defalt_Port = 3000;
 const rootNodeAddress = `http://localhost:${Defalt_Port}`;
 // setTimeout(()=> pubsub.broadcastChain(),1000);
