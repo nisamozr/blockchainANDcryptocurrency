@@ -29,6 +29,15 @@ app.post('/api/mine', (req, res)=>{
 
     res.redirect('/api/blocks');
 })
+app.post('/api/transact', (req, res)=>{
+    const {amount , recipent} = req.body
+
+    const transaction = wallet.createTransaction({recipent, amount});
+    transactionPool.setTransaction(transaction)
+    console.log('transactionPool', transactionPool)
+
+    res.json({transaction})
+})
 
 const syncChains = ()=>{
     request({url: `${rootNodeAddress}/api/blocks`},(error, res, body)=>{
