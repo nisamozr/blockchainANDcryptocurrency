@@ -9,4 +9,9 @@ const GenesisData = {
     data:[]
 };
 const startingBalance = 1000;
-module.exports = {GenesisData, minerRate, initialDifficulty,startingBalance};
+
+const reward_input ={
+    address : 'authorzed rewarde'
+}
+const miningReward = 50
+module.exports = {GenesisData, minerRate, initialDifficulty,startingBalance, reward_input, miningReward};

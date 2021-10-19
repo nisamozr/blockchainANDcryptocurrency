@@ -1,6 +1,7 @@
 const TransactionPool = require('./transactioinPoot')
 const Transaction = require('./transaction')
 const Wallet = require('./index')
+const Blockchain = require('../blockchain/blockchain')
 
 describe('Transaction Pool', ()=>{
     let transactioPool , transaction, senderWallet;
@@ -59,6 +60,35 @@ describe('Transaction Pool', ()=>{
         it('log erro for on validet transaction',()=>{
             transactioPool.validTransactions();
             expect(errorMock).toHaveBeenCalled()
+        })
+    })
+    describe('clear()', ()=>{
+        it('clear the transaction', ()=>{
+            transactioPool.clear()
+
+            expect(transactioPool.transactionMap).toEqual({})
+        })
+    })
+    describe('clearBlockchinTransactions()', ()=>{
+        it('clears the pool of any existing blockchain transaction', ()=>{
+            const blockchain = new Blockchain();
+            const expectedTransactionMap = {}
+
+            for( let i=0; i<6; i++){
+                const transaction = new Wallet().createTransaction({
+                    recipent: 'foo',
+                    amount: 20
+                })
+                transactioPool.setTransaction(transaction);
+
+                if(i%2 === 0){
+                    blockchain.addBlock({data:[transaction]})
+                }else{
+                    expectedTransactionMap[transaction.id] = transaction
+                }
+            }
+            transactioPool.createBlockchainTransaction({chain: blockchain.chain})
+            expect(transactioPool.transactionMap).toEqual(expectedTransactionMap)
         })
     })
 
