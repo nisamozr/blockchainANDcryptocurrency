@@ -62,6 +62,11 @@ app.get('/api/minr-tansactions',(req , res)=>{
     res.redirect('/api/blocks')
 })
 
+app.get('/api/wallet-info',(req, res)=>{
+   
+    res.json({address: wallet.publicKey, balance : Wallet.calculateBalance({chain: blockchain.chain, address: wallet.publicKey})})
+})
+
 const syncWithRootStat = ()=>{
     request({url: `${rootNodeAddress}/api/blocks`},(error, res, body)=>{
         if(!error && res.statusCode === 200){
