@@ -13,7 +13,7 @@ const blockchain = new Blockchain();
 const transactionPool = new TransactionPool()
 const pubsub = new PubSub({blockchain, transactionPool})
 const wallet = new Wallet()
-const transactionMiner = new TransactionMiner({blockchain, transactionPool, wallet, pubSub})
+const transactionMiner = new TransactionMiner({blockchain, transactionPool, wallet, pubsub})
 
 const Defalt_Port = 3000;
 const rootNodeAddress = `http://localhost:${Defalt_Port}`;
@@ -56,6 +56,10 @@ app.post('/api/transact', (req, res)=>{
 })
 app.get('/api/transaction-pool-map', (req, res)=> {
     res.json(transactionPool.transactionMap)
+})
+app.get('/api/minr-tansactions',(req , res)=>{
+    transactionMiner.mineTransactions()
+    res.redirect('/api/blocks')
 })
 
 const syncWithRootStat = ()=>{
