@@ -14,7 +14,10 @@ class Wallet{
         return this.keyPair.sign(cryptoHash(data))
 
     }
-    createTransaction({amount, recipent}){
+    createTransaction({amount, recipent, chain}){
+        if(chain){
+            this.balance = Wallet.calculateBalance({chain,address: this.publicKey})
+        }
         if(amount > this.balance){
             throw new Error('Amount exceeds balance')
         }
