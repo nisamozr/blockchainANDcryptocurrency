@@ -115,7 +115,39 @@ describe('wallet', () => {
                 })).toEqual(startingBalance + transactionOne.outputMap[wallet.publicKey] + transactionTwo.outputMap[wallet.publicKey] )
 
             })
-            describe('and the wallet has made a transactionjh-')
+            describe('and the wallet has made a transaction', ()=>{
+                let recentTransaction;
+
+                beforeEach(()=>{
+                    recentTransaction = wallet.createTransaction({recipent: 'foo-address',amount:30})
+
+                    blockchain.addBlock({data: [recentTransaction]})
+
+                })
+
+                it('returen the output of the recentTransaction ', ()=>{
+                    expect( Wallet.calculateBalance({chain: blockchain.chain, address: wallet.publicKey})).toEqual(recentTransaction.outputMap[wallet.publicKey])
+                   
+                })
+                describe('and there are outputs next to and after the  recent transaction',()=>{
+                    let sameBlocktransaction, nextBlockTransaction
+
+                    beforeEach(()=>{
+                        recentTransaction = wallet.createTransaction({recipent: 'later-foo-address', amount:60})
+                        sameBlocktransaction = Transaction.rewardTransaction({minerWallet:wallet})
+                        blockchain.addBlock({data: [recentTransaction, sameBlocktransaction]})
+
+                        nextBlockTransaction = new Wallet().createTransaction({
+                            recipent:wallet.publicKey, amount:75
+                        })
+                        blockchain.addBlock({data: [nextBlockTransaction]})
+                    })
+                    it('includes the output amount is the returwn balance', ()=>{
+                        expect(Wallet.calculateBalance({chain: blockchain.chain, address:wallet.publicKey})).toEqual(recentTransaction.outputMap[wallet.publicKey]+sameBlocktransaction.outputMap[wallet.publicKey]+ nextBlockTransaction.outputMap[wallet.publicKey])
+                    })
+
+                })
+            })
 
         })
 
