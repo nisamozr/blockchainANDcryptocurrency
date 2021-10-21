@@ -95,6 +95,38 @@ const syncWithRootStat = ()=>{
     })
 }
 
+const walletFoo = new Wallet()
+const walletBar = new Wallet()
+
+const grneratWalletTransaction = ({ wallet, recipent, amount}) =>{
+    const transaction = wallet.createTransaction({
+        recipent, amount, chain:blockchain.chain
+    })
+
+    transactionPool.setTransaction(transaction)
+}
+
+const walletAction = ()=> grneratWalletTransaction({wallet, recipent:walletFoo.publicKey, amount:5})
+
+const walletFooAction = ()=> grneratWalletTransaction({wallet: walletFoo, recipent:walletBar.publicKey, amount:10})
+const walletBarAction = ()=> grneratWalletTransaction({wallet: walletBar, recipent:wallet.publicKey, amount:15})
+
+for(let i= 0 ; i<10; i++){
+    if(i%3 ===0){
+        walletAction()
+        walletFooAction
+    }
+    else if(i%3 ===1){
+        walletAction()
+        walletBarAction()
+    }else{
+        walletFooAction()
+        walletBarAction()
+    }
+
+    transactionMiner.mineTransactions();
+}
+
 let peerPort ;
 
 if(process.env.GENERTE_PEER_PORT === 'true'){
