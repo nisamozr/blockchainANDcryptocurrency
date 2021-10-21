@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const request = require('request')
+const path = require('path')
 
 const Blockchain = require('./blockchain/blockchain');
 const PubSub = require('./app/pubsub')
@@ -15,11 +16,12 @@ const pubsub = new PubSub({blockchain, transactionPool})
 const wallet = new Wallet()
 const transactionMiner = new TransactionMiner({blockchain, transactionPool, wallet, pubsub})
 
-const Defalt_Port = 3000;
+const Defalt_Port = 5000;
 const rootNodeAddress = `http://localhost:${Defalt_Port}`;
 // setTimeout(()=> pubsub.broadcastChain(),1000);
 
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname,'client/dist')))
 
 app.get('/api/blocks', (req, res)=>{
     res.json(blockchain.chain)
@@ -65,6 +67,9 @@ app.get('/api/minr-tansactions',(req , res)=>{
 app.get('/api/wallet-info',(req, res)=>{
    
     res.json({address: wallet.publicKey, balance : Wallet.calculateBalance({chain: blockchain.chain, address: wallet.publicKey})})
+})
+app.get('*', (req, res)=> {
+    res.sendFile(path.join(__dirname, 'client/dist/index.html'))
 })
 
 const syncWithRootStat = ()=>{

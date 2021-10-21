@@ -5,10 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll",
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "npm run build-client && node index.js",
+    "dev": "npm run dev-client &  nodemon index.js",
     "start-redis": "redis-sever",
-    "dev-peer": "cross-env GENERTE_PEER_PORT='true' node index.js"
+    "dev-peer": "cross-env GENERTE_PEER_PORT='true' node index.js",
+    "build-client": "npm run clean && parcel build client/public/index.html --out-dir client/dist",
+    "dev-client": "npm run clean && parcel client/public/index.html --out-dir client/dist",
+    "clean": "rm -rf .cache client/dist"
   },
   "just": {
     "testEnvironment": "node"
@@ -17,6 +20,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "body-parser": "^1.19.0",
     "cross-env": "^7.0.3",
     "elliptic": "^6.5.4",
@@ -24,9 +35,15 @@
     "hex-to-binary": "^1.0.1",
     "jest": "^27.2.5",
     "nodemon": "^2.0.13",
+    "parcel-bundler": "^1.12.5",
     "pubnub": "^4.33.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "redis": "^3.1.2",
     "request": "^2.88.2",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.15.6"
   }
 }
