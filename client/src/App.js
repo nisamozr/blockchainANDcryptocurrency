@@ -14,14 +14,14 @@ class App extends Component {
     render() {
         const { address, balance } = this.state.walletInfo
         return (
-            <div>
+            <div className="App">
                 <div className="img-body">
                     <div className="continer">
                         <div className="row">
-                            <div className="col-12">
-                                Address: {address}
+                            <div className="address">
+                                Address: <p>{address}</p>
                             </div >
-                            <div className="col-12">Balance: {balance}</div>
+                            <div className="col-12">Balance: <span>{balance}</span></div>
                         </div>
                     </div>
 
