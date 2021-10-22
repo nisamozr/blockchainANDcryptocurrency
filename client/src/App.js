@@ -1,6 +1,7 @@
 import { json } from 'body-parser'
 import React, { Component } from 'react'
-import Blocks from './components/Blocks'
+import {Link} from 'react-router-dom'
+
 
 
 class App extends Component {
@@ -16,6 +17,11 @@ class App extends Component {
         return (
             <div className="App">
                 <div className="img-body">
+                    <div className="herader">
+                        <Link to='/blocks'>Blocks</Link>
+                        <Link to='/transact'>conduct transaction</Link>
+
+                    </div>
                     <div className="continer">
                         <div className="row">
                             <div className="address">
@@ -29,8 +35,7 @@ class App extends Component {
 
 
 
-                <br />
-                <Blocks />
+              
 
             </div>
         )
