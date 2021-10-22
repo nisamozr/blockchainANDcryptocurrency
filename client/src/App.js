@@ -1,41 +1,47 @@
 import { json } from 'body-parser'
 import React, { Component } from 'react'
-import {Link} from 'react-router-dom'
+import history from './history';
+import { BrowserRouter, Switch, Route, Fragment } from 'react-router-dom'
 
+import Blocks from './components/Blocks';
+import ContactTransaction from './components/ContactTransaction';
 
+import TransactionPool from './components/TransactionPool';
+import Home from './components/Home.js';
+import { About } from './components/About';
 
 class App extends Component {
-    state = { walletInfo: {} }
-    componentDidMount() {
-        fetch('http://localhost:5000/api/wallet-info')
-            .then(response => response.json())
-            .then(json => this.setState({ walletInfo: json }))
-    }
+
 
     render() {
-        const { address, balance } = this.state.walletInfo
         return (
+
             <div className="App">
-                <div className="img-body">
-                    <div className="herader">
-                        <Link to='/blocks'>Blocks</Link>
-                        <Link to='/transact'>conduct transaction</Link>
-
-                    </div>
-                    <div className="continer">
-                        <div className="row">
-                            <div className="address">
-                                Address: <p>{address}</p>
-                            </div >
-                            <div className="col-12">Balance: <span>{balance}</span></div>
-                        </div>
-                    </div>
-
-                </div>
 
 
 
-              
+                <BrowserRouter history={history}>
+                    <Switch>
+                        <Route exact path='/'>
+                            <Home/>
+                            <About/>
+                           
+                        </Route>
+                        <Route path='/blocks' >
+                        <Home/>
+                        <Blocks/>
+
+                        </Route>
+                        <Route path='/transact' >
+                        <Home/>
+                        <ContactTransaction/>
+                        </Route>
+                        <Route path='/tansaction-pool'>
+                        <Home/>
+                        <TransactionPool/>
+                        </Route>
+                    </Switch>
+                </BrowserRouter>
 
             </div>
         )

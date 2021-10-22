@@ -1,25 +1,26 @@
 import React ,{Component} from "react";
 import {FormGroup, FormControl, Button} from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import history from "../history";
 
 
 class ContactTransaction extends Component{
-    state = { rescipient : '', amount: 0}
+    state = { recipent : '', amount: ''}
     updateRecipient = event =>{
-        this.setState({rescipient: event.target.value})
+        this.setState({recipent: event.target.value})
     }
     updateAmount = event =>{
         this.setState({amount:Number( event.target.value)})
     }
     conductTransaction = ()=>{
-        const {rescipient, amount}= this.state
+        const {recipent, amount}= this.state
 
-        fetch('http://localhost:3000/api/transact', {
+        fetch(`${document.location.origin}/api/transact`, {
             method:'POST', 
             headers: {'Content-Type' : 'application/json'},
-            body: JSON.stringify({rescipient, amount})
+            body: JSON.stringify({recipent, amount})
         }).then( response => response.json()).then(json => {
             alert(json.message || json.type)
+            history.push('/tansaction-pool')
         })
     }
 
@@ -27,14 +28,14 @@ class ContactTransaction extends Component{
     
         return(
             <div className="contuctTransaction">
-                <Link to='/'>Home</Link>
-                <h3>Conduct a Transaction</h3>
-                <FormGroup>
-                    <FormControl input="text" placeholder='recipient' value={this.state.rescipient} onChange={this.updateRecipient}>
+                
+                <h3 className='tag'>Conduct a Transaction</h3>
+                <FormGroup className="mb-3">
+                    <FormControl input="text" placeholder='recipient' value={this.state.recipent} onChange={this.updateRecipient}>
                         
                     </FormControl>
                 </FormGroup>
-                <FormGroup>
+                <FormGroup className="mb-3">
                     <FormControl input="number" placeholder='amount' value={this.state.amount} onChange={this.updateAmount}>
                         
                     </FormControl>
