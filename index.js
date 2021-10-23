@@ -1,14 +1,16 @@
 const express = require('express');
-const bodyParser = require('body-parser')
+require('dotenv').config()
+// const bodyParser = require('body-parser')
 const request = require('request')
 const path = require('path')
+const indexRouter = require('./router/index')
 
 const Blockchain = require('./blockchain/blockchain');
 const PubSub = require('./app/pubsub')
 const TransactionPool = require('./wallet/transactioinPoot')
 const Wallet = require('./wallet/index')
 const TransactionMiner = require('./app/transactionMinert')
-const indexRouter = require('./router/index')
+
 
 const app = express();
 const blockchain = new Blockchain();
@@ -17,12 +19,17 @@ const pubsub = new PubSub({blockchain, transactionPool})
 const wallet = new Wallet()
 const transactionMiner = new TransactionMiner({blockchain, transactionPool, wallet, pubsub})
 
-const Defalt_Port = 5000;
-const rootNodeAddress = `http://localhost:${Defalt_Port}`;
+const Defalt_Port = process.env.PORT;
+const host = process.env.HOST;
+
+const rootNodeAddress = `http://${host}:${Defalt_Port}`;
 // setTimeout(()=> pubsub.broadcastChain(),1000);
 
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname,'client/dist')))
+// app.use(bodyParser.json());
+app.use(express.json({}));
+// app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname,'/client/dist')))
+
 app.use("/", indexRouter);
 
 const syncWithRootStat = ()=>{
@@ -93,3 +100,20 @@ app.listen(PORT, ()=>{
     }
 
 })
+
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    next(createError(404));
+  });
+  
+  // error handler
+  app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get("env") === "development" ? err : {};
+  
+    // render the error page
+    res.status(err.status || 500);
+    res.render("error");
+  });

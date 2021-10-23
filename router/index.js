@@ -1,5 +1,21 @@
 var express = require('express');
 var router = express.Router();
+const path = require('path')
+
+const Blockchain = require('../blockchain/blockchain');
+const PubSub = require('../app/pubsub')
+const TransactionPool = require('../wallet/transactioinPoot')
+const Wallet = require('../wallet/index')
+const TransactionMiner = require('../app/transactionMinert')
+
+const blockchain = new Blockchain();
+const transactionPool = new TransactionPool()
+const pubsub = new PubSub({blockchain, transactionPool})
+const wallet = new Wallet()
+
+const transactionMiner = new TransactionMiner({blockchain, transactionPool, wallet, pubsub})   
+
+
 router.get('/api/blocks', (req, res)=>{
     res.json(blockchain.chain)
 })
@@ -46,5 +62,7 @@ router.get('/api/wallet-info',(req, res)=>{
     res.json({address: wallet.publicKey, balance : Wallet.calculateBalance({chain: blockchain.chain, address: wallet.publicKey})})
 })
 router.get('*', (req, res)=> {
-    res.sendFile(path.join(__dirname, 'client/dist/index.html'))
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'))
 })
+
+module.exports = router;
