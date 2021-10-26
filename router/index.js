@@ -61,6 +61,17 @@ router.get('/api/wallet-info',(req, res)=>{
    
     res.json({address: wallet.publicKey, balance : Wallet.calculateBalance({chain: blockchain.chain, address: wallet.publicKey})})
 })
+router.get('api/known-addresses', (req, res)=>{
+    const addressMap = {}
+    for( let block of blockchain.chain){
+    for( let transaction of block.data){
+        const recipent = Object.keys(transaction.outputMap)
+        recipent.forEach(recipent => addressMap[recipent] = recipent)
+    }
+}
+res.json(Object.keys(addressMap))
+
+})
 router.get('*', (req, res)=> {
     res.sendFile(path.join(__dirname, '../client/dist/index.html'))
 })

@@ -84061,7 +84061,7 @@ var Blocks = /*#__PURE__*/function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      fetch('http://localhost:5000/api/blocks').then(function (response) {
+      fetch("".concat(document.location.origin, "/api/blocks")).then(function (response) {
         return response.json();
       }).then(function (json) {
         return _this2.setState({
@@ -84178,7 +84178,9 @@ var ContactTransaction = /*#__PURE__*/function (_Component) {
       }).then(function (json) {
         alert(json.message || json.type);
 
-        _history.default.push('/tansaction-pool');
+        _history.default.push("/tansaction-pool");
+
+        window.location.reload();
       });
     }, _temp));
   }
@@ -84309,12 +84311,10 @@ var TransactionPool = /*#__PURE__*/function (_Component) {
       this.fechPoolmapIntervel = setInterval(function () {
         return _this2.fetchTransactionPoolMap();
       }, Pool_interval_ms);
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      clearInterval(this.fechPoolmapIntervel);
-    }
+    } // componentWillUnmount(){
+    //     clearInterval(this.fechPoolmapIntervel)
+    // }
+
   }, {
     key: "render",
     value: function render() {
@@ -84327,7 +84327,7 @@ var TransactionPool = /*#__PURE__*/function (_Component) {
           key: transaction.id
         }, /*#__PURE__*/_react.default.createElement("hr", null), /*#__PURE__*/_react.default.createElement(_Transaction.default, {
           transaction: transaction
-        }));
+        }), console.log("gggggggggggggggggggggggg", transaction));
       }), /*#__PURE__*/_react.default.createElement("hr", null), /*#__PURE__*/_react.default.createElement(_reactBootstrap.Button, {
         onClick: this.fetchMineTransaction
       }, "Mine the Transaction"));
@@ -84914,7 +84914,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44347" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41751" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

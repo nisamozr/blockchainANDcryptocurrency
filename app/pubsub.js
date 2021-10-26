@@ -1,19 +1,19 @@
 const radis = require('redis');
-const blockchain = require('../blockchain/blockchain')
+// const blockchain = require('../blockchain/blockchain')
 
 const channels = {
     test: 'test',
-    Blockchain: 'blockchain',
+    Blockchain: 'Blockchain',
     Transaction: 'Transaction'
 }
 
 class Pubsub{
-    constructor({blockchain, transactionPool}){
+    constructor({blockchain, transactionPool, redisUrl}){
         this.blockchain = blockchain
         this.transactionPool = transactionPool
         
-        this.publisher = radis.createClient();
-        this.subscribler = radis.createClient();
+        this.publisher = radis.createClient(redisUrl);
+        this.subscribler = radis.createClient(redisUrl);
         
 
         // this.subscribler.subscribe(channels.test);
@@ -37,7 +37,7 @@ class Pubsub{
                 })
             })
             break;
-            case channel.Transaction : this.transactionPool.setTransaction(parsedMessage)
+            case channels.Transaction : this.transactionPool.setTransaction(parsedMessage)
             break;
             default: return;
         }
