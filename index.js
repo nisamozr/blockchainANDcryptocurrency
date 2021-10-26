@@ -16,9 +16,10 @@ const isDevelopment = process.env.ENV = 'development';
 
 // const Defalt_Port = process.env.PORT;
 const Defalt_Port = 5000;
-const host = process.env.HOST;
+// const host = process.env.HOST;
+const host = 'http://localhost' || 'http://3.109.221.98'
 // const rootNodeAddress = `http://${host}:${Defalt_Port}`;
-const rootNodeAddress = `http://localhost:50000`;
+const rootNodeAddress = `${host}:50000`;
 const REDIS_URL = isDevelopment ? 'redis://127.0.0.1:6379' : 'redis-cli -h blockchain.u3rmdk.0001.aps1.cache.amazonaws.com -p 6379'
 
 
