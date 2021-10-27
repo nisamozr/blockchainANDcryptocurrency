@@ -65,8 +65,8 @@ class Pubsub{
             channel: channels.Transaction,
             message: JSON.stringify(transaction)
         })
-    }
+     }
 }
-
+ 
 
 module.exports = Pubsub;
