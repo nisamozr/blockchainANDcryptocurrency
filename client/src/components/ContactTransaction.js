@@ -6,7 +6,9 @@ import history from "../history";
 
 
 class ContactTransaction extends Component {
-    state = { recipent: '', amount: '' }
+    state = { recipent: '', amount: '', knowAddresses: [] }
+
+    componentDidMount
     updateRecipient = event => {
         this.setState({ recipent: event.target.value })
     }

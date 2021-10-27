@@ -19,6 +19,23 @@ const transactionMiner = new TransactionMiner({blockchain, transactionPool, wall
 router.get('/api/blocks', (req, res)=>{
     res.json(blockchain.chain)
 })
+router.get('/api/blocks/length', (req, res)=>{
+    res.json(blockchain.chain.length)
+})
+router.get('/api/blocks/:id', (req, res)=>{
+    const {id} = req.params;
+
+    const {length} = blockchain.chain
+    const blocksRevers = blockchain.chain.slice().reverse()
+
+    let startIndex = (id-1)* 5
+    let endIndex = id * 5
+
+    startIndex =  startIndex < length ? startIndex: length;
+    endIndex = endIndex < length ? endIndex : length
+
+    res.json(blocksRevers.slice(startIndex, endIndex))
+})
 router.post('/api/mine', (req, res)=>{
     const {data} = req.body;
     blockchain.addBlock({data});
@@ -61,11 +78,13 @@ router.get('/api/wallet-info',(req, res)=>{
    
     res.json({address: wallet.publicKey, balance : Wallet.calculateBalance({chain: blockchain.chain, address: wallet.publicKey})})
 })
-router.get('api/known-addresses', (req, res)=>{
+router.get('/api/known-addresses', (req, res)=>{
     const addressMap = {}
     for( let block of blockchain.chain){
     for( let transaction of block.data){
+      
         const recipent = Object.keys(transaction.outputMap)
+       
         recipent.forEach(recipent => addressMap[recipent] = recipent)
     }
 }

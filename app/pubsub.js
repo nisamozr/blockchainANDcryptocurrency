@@ -27,7 +27,7 @@ class Pubsub{
        
     }
     handleMessage(channel, message){
-        console.log(`massage racived chanall ${channel} massage ${message}`)
+        // console.log(`massage racived chanall ${channel} massage ${message}`)
         const parsedMessage = JSON.parse(message)
 
         switch(channel){
