@@ -3,15 +3,16 @@ var router = express.Router();
 const path = require('path')
 
 const Blockchain = require('../blockchain/blockchain');
-const PubSub = require('../app/pubsub')
+const PubSub = require('../app/pubnub')
 const TransactionPool = require('../wallet/transactioinPoot')
 const Wallet = require('../wallet/index')
 const TransactionMiner = require('../app/transactionMinert')
 
 const blockchain = new Blockchain();
 const transactionPool = new TransactionPool()
-const pubsub = new PubSub({blockchain, transactionPool})
 const wallet = new Wallet()
+const pubsub = new PubSub({blockchain, transactionPool,wallet})
+
 
 const transactionMiner = new TransactionMiner({blockchain, transactionPool, wallet, pubsub})   
 

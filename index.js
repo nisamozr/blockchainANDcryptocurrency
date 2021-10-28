@@ -7,7 +7,7 @@ const indexRouter = require('./router/index')
 
 
 const Blockchain = require('./blockchain/blockchain');
-const PubSub = require('./app/pubsub')
+const PubSub = require('./app/pubnub')
 const TransactionPool = require('./wallet/transactioinPoot')
 const Wallet = require('./wallet/index')
 const TransactionMiner = require('./app/transactionMinert')
@@ -20,15 +20,16 @@ const Defalt_Port = 5000;
 const host = 'http://localhost' || 'http://3.109.221.98'
 // const rootNodeAddress = `http://${host}:${Defalt_Port}`;
 const rootNodeAddress = `${host}:${Defalt_Port}`;
-const REDIS_URL =  'redis-cli -h blockchain.u3rmdk.ng.0001.aps1.cache.amazonaws.com -p 6379'
+// const REDIS_URL =  'redis-cli -h blockchain.u3rmdk.ng.0001.aps1.cache.amazonaws.com -p 6379'
 
  
 
 const app = express();
 const blockchain = new Blockchain();
 const transactionPool = new TransactionPool()
-const pubsub = new PubSub({ blockchain, transactionPool , redisUrl:REDIS_URL})
 const wallet = new Wallet()
+const pubsub = new PubSub({ blockchain, transactionPool ,wallet})
+
 const transactionMiner = new TransactionMiner({ blockchain, transactionPool, wallet, pubsub })
 
 
