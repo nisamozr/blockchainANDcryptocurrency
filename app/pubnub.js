@@ -7,7 +7,6 @@ const credencials = {
 
 }
 const CHANNELS = {
-    test: 'test',
     BLOCKCHAIN: 'BLOCKCHAIN',
     TRANSACTION: 'TRANSACTION'
 }
