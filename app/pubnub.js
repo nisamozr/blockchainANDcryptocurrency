@@ -12,34 +12,31 @@ const CHANNELS = {
 }
 
 class Pubsub {
-    constructor({ blockchain, transactionPool, wallet }) {
+    constructor({ blockchain, transactionPool }) {
         this.blockchain = blockchain;
         this.transactionPool = transactionPool;
-        this.wallet = wallet;
+        // this.wallet = wallet;
         console.log('fffffffffffffffffffffffff')
 
         this.pubnub = new PubNub(credencials)
-        this.pubnub.subscribe({ CHANNELS: Object.values(CHANNELS) })
+        this.subscribeToChannel()
+        // this.pubnub.publish(credencials)
         this.pubnub.addListener(this.listener())
     }
-    broadcastChain() {
-        this.publish({
-            channel: CHANNELS.BLOCKCHAIN,
-            message: JSON.stringify(this.blockchain.chain)
-        });
-    }
+    // broadcastChain() {
+    //     this.publish({
+    //         channel: CHANNELS.BLOCKCHAIN,
+    //         message: JSON.stringify(this.blockchain.chain)
+    //     });
+    // }
 
-    broadcastTransaction(transaction) {
-        this.publish({
-            channel: CHANNELS.TRANSACTION,
-            message: JSON.stringify(transaction)
-        });
-    }
-    subscribeToChannels() {
-        this.pubnub.subscribe({
-            channels: [Object.values(CHANNELS)]
-        });
-    }
+    // broadcastTransaction(transaction) {
+    //     this.publish({
+    //         channel: CHANNELS.TRANSACTION,
+    //         message: JSON.stringify(transaction)
+    //     });
+    // }
+    
 
     listener() {
         return {
@@ -52,18 +49,18 @@ class Pubsub {
 
                 switch (channel) {
                     case CHANNELS.BLOCKCHAIN:
-                        this.blockchain.replaceChain(parsedMessage, true, () => {
+                        this.blockchain.replaceChain(parsedMessage, () => {
                             this.transactionPool.createBlockchainTransaction(
                                 { chain: parsedMessage.chain }
                             );
                         });
                         break;
                     case CHANNELS.TRANSACTION:
-                        if (!this.transactionPool.existingTransaction({
-                            inputAddress: this.wallet.publicKey
-                        })) {
+                        // if (!this.transactionPool.existingTransaction({
+                        //     inputAddress: this.wallet.publicKey
+                        // })) {
                             this.transactionPool.setTransaction(parsedMessage);
-                        }
+                        // }
                         break;
                     default:
                         return;
@@ -71,8 +68,14 @@ class Pubsub {
             }
         }
     }
+    subscribeToChannel() {
+        this.pubnub.subscribe({
+            CHANNELS: [Object.values(CHANNELS)]
+        });
+    }
     publish({ channel, message }) {
-        this.pubnub.publish({  message, channel })
+        
+        this.pubnub.publish({ channel,  message })
     }
     broadcastChain() {
         this.publish({

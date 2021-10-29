@@ -7,12 +7,12 @@ const indexRouter = require('./router/index')
 
 
 const Blockchain = require('./blockchain/blockchain');
-const PubSub = require('./app/pubnub')
+const Pubsub = require('./app/pubnub')
 const TransactionPool = require('./wallet/transactioinPoot')
 const Wallet = require('./wallet/index')
 const TransactionMiner = require('./app/transactionMinert')
 
-const isDevelopment = process.env.ENV = 'development';
+// const isDevelopment = process.env.ENV = 'development';
 
 // const Defalt_Port = process.env.PORT;
 const Defalt_Port = 5000;
@@ -28,7 +28,7 @@ const app = express();
 const blockchain = new Blockchain();
 const transactionPool = new TransactionPool()
 const wallet = new Wallet()
-const pubsub = new PubSub({ blockchain, transactionPool ,wallet})
+const pubsub = new Pubsub({ blockchain, transactionPool })
 
 const transactionMiner = new TransactionMiner({ blockchain, transactionPool, wallet, pubsub })
 
@@ -62,7 +62,7 @@ const syncWithRootStat = () => {
 
     })
 }
-if (isDevelopment) {
+// if (isDevelopment) {
 
     const walletFoo = new Wallet()
     const walletBar = new Wallet()
@@ -95,7 +95,7 @@ if (isDevelopment) {
 
         transactionMiner.mineTransactions();
     }
-}
+// }
 
     let peerPort;
 
