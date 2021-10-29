@@ -41,7 +41,6 @@ class Pubsub{
             break;
             default: return;
         }
-       
     }
     subscribeToChannel(){
         Object.values(channels).forEach(channel =>{
