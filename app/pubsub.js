@@ -16,8 +16,7 @@ class Pubsub{
         this.subscribler = radis.createClient(redisUrl);
         
 
-        // this.subscribler.subscribe(channels.test);
-        // this.subscribler.subscribe(channels.Blockchain)
+    
         this.subscribeToChannel();
         this.subscribler.on('message', (channel, message)=>{
             
@@ -27,7 +26,7 @@ class Pubsub{
        
     }
     handleMessage(channel, message){
-        // console.log(`massage racived chanall ${channel} massage ${message}`)
+
         const parsedMessage = JSON.parse(message)
 
         switch(channel){
