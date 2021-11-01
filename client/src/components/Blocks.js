@@ -10,8 +10,7 @@ class Blocks extends Component{
         fetch('http://localhost:5000/api/blocks')
         .then(response => response.json())
         .then(json => this.setState({block: json}))
-    }
-   
+    } 
     render(){
      
       console.log(this.state)
@@ -22,7 +21,7 @@ class Blocks extends Component{
                 {
                     this.state.block.map(block =>{
                         return(
-                            // <div key={block.hash} className="block">{block.hash}</div>
+                          
                             <Block key={block.hash}  block={block}/>
                         )
                     })
