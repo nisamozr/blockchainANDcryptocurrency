@@ -20,8 +20,7 @@ class Blocks extends Component{
         fetch(`${document.location.origin}/api/blocks/${paginatedId}`)
         .then(response => response.json())
         .then(json => this.setState({block: json}))
-    }
-   
+    } 
     render(){
      
       console.log(this.state)
@@ -45,7 +44,7 @@ class Blocks extends Component{
                 {
                     this.state.block.map(block =>{
                         return(
-                            // <div key={block.hash} className="block">{block.hash}</div>
+                          
                             <Block key={block.hash}  block={block}/>
                         )
                     })
