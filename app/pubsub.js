@@ -1,23 +1,22 @@
 const radis = require('redis');
-const blockchain = require('../blockchain/blockchain')
+// const blockchain = require('../blockchain/blockchain')
 
 const channels = {
     test: 'test',
-    Blockchain: 'blockchain',
+    Blockchain: 'Blockchain',
     Transaction: 'Transaction'
 }
 
 class Pubsub{
-    constructor({blockchain, transactionPool}){
+    constructor({blockchain, transactionPool, redisUrl}){
         this.blockchain = blockchain
         this.transactionPool = transactionPool
         
-        this.publisher = radis.createClient();
-        this.subscribler = radis.createClient();
+        this.publisher = radis.createClient(redisUrl);
+        this.subscribler = radis.createClient(redisUrl);
         
 
-        // this.subscribler.subscribe(channels.test);
-        // this.subscribler.subscribe(channels.Blockchain)
+    
         this.subscribeToChannel();
         this.subscribler.on('message', (channel, message)=>{
             
@@ -27,7 +26,7 @@ class Pubsub{
        
     }
     handleMessage(channel, message){
-        console.log(`massage racived chanall ${channel} massage ${message}`)
+
         const parsedMessage = JSON.parse(message)
 
         switch(channel){
@@ -37,12 +36,10 @@ class Pubsub{
                 })
             })
             break;
-            case channel.Transaction : this.transactionPool.setTransaction(parsedMessage)
+            case channels.Transaction : this.transactionPool.setTransaction(parsedMessage)
             break;
             default: return;
         }
-
-       
     }
     subscribeToChannel(){
         Object.values(channels).forEach(channel =>{
@@ -65,8 +62,8 @@ class Pubsub{
             channel: channels.Transaction,
             message: JSON.stringify(transaction)
         })
-    }
+     }
 }
-
+ 
 
 module.exports = Pubsub;

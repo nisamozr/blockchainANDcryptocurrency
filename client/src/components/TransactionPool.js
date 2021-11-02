@@ -4,7 +4,7 @@ import Transaction from './Transaction'
 import { Link } from "react-router-dom";
 import history from "../history";
 
-const Pool_interval_ms= 10000
+const Pool_interval_ms = 10000
 
 
 class TransactionPool extends Component{
@@ -35,11 +35,13 @@ class TransactionPool extends Component{
             Pool_interval_ms
         )
     }
-    componentWillUnmount(){
-        clearInterval(this.fechPoolmapIntervel)
-    }
+    // componentWillUnmount(){
+    //     clearInterval(this.fechPoolmapIntervel)
+    // }
 
     render(){
+        
+       
         return(
             <div className="transactionPool">
                 <div>
@@ -53,6 +55,7 @@ class TransactionPool extends Component{
                             <div key={transaction.id}>
                                 <hr />
                                 <Transaction transaction={transaction}/>
+                            { console.log( "gggggggggggggggggggggggg",transaction)}
                             </div>
                         )
                     })

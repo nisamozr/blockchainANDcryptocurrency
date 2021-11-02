@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll",
-    "start": "npm run build-client && node index.js",
-    "dev": "npm run dev-client &  nodemon index.js",
-    "start-redis": "redis-sever",
-    "dev-peer": "cross-env GENERTE_PEER_PORT='true' node index.js",
+    "start": "npm run build-client & node index.js",
+    "dev": " npm run dev-client & npm run start-redis && cross-env ENV='developmenr' nodemon index.js",
+    "start-redis": "redis-server --daemonize yes",
+    "dev-peer": " cross-env GENERTE_PEER_PORT='true' nodemon index.js",
     "build-client": "npm run clean && parcel build client/public/index.html --out-dir client/dist",
     "dev-client": "npm run clean && parcel client/public/index.html --out-dir client/dist",
-    "clean": "rm -rf .cache client/dist"
+    "clean": "rm -rf .cache client/dist" 
   },
   "just": {
     "testEnvironment": "node"
@@ -30,6 +30,7 @@
     "babel-preset-react": "^6.24.1",
     "body-parser": "^1.19.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^10.0.0",
     "elliptic": "^6.5.4",
     "express": "^4.17.1",
     "hex-to-binary": "^1.0.1",
@@ -39,6 +40,7 @@
     "parcel-bundler": "^1.12.5",
     "pubnub": "^4.33.0",
     "r": "0.0.5",
+    "re": "^0.1.4",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0",
     "react-copy-to-clipboard": "^5.0.4",
